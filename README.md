@@ -58,6 +58,8 @@ Route::get('/', function() {
 });
 
 Route::get('/iletisim', '\Controllers\Contact');
+
+Route::get('/user/:url', '\Controllers\User\Detail');
 ```
 
 gibi. Tabi bu kod doğrudan çalışmaz ancak PHP developer olarak ne demek istediğimi anladınız bence :D
@@ -95,3 +97,92 @@ node app.js
 ```
 
 Artık `http://localhost:3000` ve `http://localhost:3000/iletisim` adreslerinden yazdığınız kodları görebilirsiniz.
+
+Bir başka örnekte dinamik değerleri almakla ilgili olsun. Örneğin `/user/tayfunerbilen` adresine girdiğimizde `tayfunerbilen` değeri dinamik olacağı için bunu almak gerekiyor. Onun içinde şöyle bir route ekleyebilirdik:
+
+```js
+app.get('/user/:slug', (req, res) => {
+  res.send('hoşgeldin ' + req.params.slug)
+})
+```
+
+Burada `:slug` olarak belirttiğimiz değeri `req.params` içinde `slug` olarak erişebiliyor. Yani buraya `:adana` yazsaydım `req.params.adana` olarak alıp kullanacaktım.
+
+## HTML ile Kullanımı
+
+### PHP
+
+Elbette php'nin html'e gömülebilen bir dil olduğunu biliyoruz. Örneğin:
+
+```php
+
+$title = 'deneme baslik';
+$content = 'deneme content';
+
+require __DIR__ . '/home.php/';
+```
+
+ve `home.php` şöyle olsun:
+
+```php
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><?=$title?></title>
+</head>
+<body>
+
+<div>
+   <?=$content?>
+</div>
+
+</body>
+</html>
+```
+
+### NodeJS
+
+Bunun nodejs karşılığında birden fazla alternatif template engine olsada ben EJS ile örneğini göstereceğim çünkü PHP yazan birisine çok daha yakın hissettiriyor :D Önce paketi kuralım:
+
+```shell
+npm i ejs
+```
+
+Daha sonra express'de template engine olarak `ejs` kullanacağımızı söyleyelim.
+
+```js
+app.set('view engine', 'ejs')
+```
+
+ve `views` klasörü oluşturup içine bir tane `index.ejs` dosyası açalım. Evet `ejs` kodlarımızı `.ejs` uzantılı dosyada yazıyoruz :D
+
+```html
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%=title%></title>
+</head>
+<body>
+
+<div>
+   <%=content%>
+</div>
+
+</body>
+</html>
+```
+
+son olarakta bunu `/` anasayfaya girdiğinde render edelim.
+
+```js
+app.get('/', (req, res) => {
+	res.render('index', {
+		title: 'Site Basligi',
+		content: 'Hosgeldin gardas!'
+	})
+})
+```
+
+sonuç olarak `localhost:3000` adresine girdiğimizde dinamik değerleri güzel bir şekilde kullandığımız ve php'den çokta farklı olmadığını göreceksiniz kullanımın.
