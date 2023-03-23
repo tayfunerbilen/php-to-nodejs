@@ -186,3 +186,75 @@ app.get('/', (req, res) => {
 ```
 
 sonuç olarak `localhost:3000` adresine girdiğimizde dinamik değerleri güzel bir şekilde kullandığımız ve php'den çokta farklı olmadığını göreceksiniz kullanımın.
+
+### Static Dosyalar
+
+PHP'de tarayıcıdan bir dosyaya erişmek için ek bir ayar yapmanıza gerek yok. Ancak bir nodejs projesinde bunun ayarını express çatısını kullanıyorsak şöyle yapıyoruz:
+
+```js
+app.use('/assets', express.static('assets'))
+```
+
+böylece `assets` içinde css, image, js gibi dosyaları tutabilir ve erişebilirsiniz. Örneğin dosyalar yüklendiği `upload` klösörünü de 2. bir tanımla ayarlayabilirsiniz.
+
+```js
+app.use('/upload', express.static('upload'))
+```
+
+### Form Validasyon İşlemleri
+
+Validasyon işlemleri için kullanabileceğiniz bir sürü paket mevcut. Ben bunların arasından `express-validator` paketini kullanmaya karar verdim.
+
+Kurmak için: 
+
+```shell
+npm i express-validator
+```
+
+Kullanırkende, validasyon işlemi yapacağınız route'da middleware mantığında kullanıyorsunuz. Örneğin `username`, `email`, `password` ve `passwordConfirmation` alanlarına sahip form değerlerimiz olsun. Bunların kontrolünü `/register` post işleminde kontrol edelim.
+
+```js
+import { body, validationResult } from 'express-validator';
+
+// diger app kodlari
+
+app.post(
+  '/register',
+  [
+    // Kullanıcı adı en az 3 karakter olmalı ve alfanümerik olmalıdır.
+    body('username')
+      .isLength({ min: 3 })
+      .withMessage('Kullanıcı adı en az 3 karakter olmalıdır.')
+      .isAlphanumeric()
+      .withMessage('Kullanıcı adı sadece alfanümerik karakterler içermelidir.'),
+
+    // E-posta geçerli olmalıdır.
+    body('email')
+      .isEmail()
+      .withMessage('Geçerli bir e-posta adresi girin.'),
+
+    // Şifre en az 6 karakter uzunluğunda olmalıdır.
+    body('password')
+      .isLength({ min: 6 })
+      .withMessage('Şifre en az 6 karakter uzunluğunda olmalıdır.'),
+
+    // Şifre ve şifre doğrulama alanları eşleşmelidir.
+    body('passwordConfirmation').custom((value, { req }) => {
+      if (value !== req.body.password) {
+        throw new Error('Şifre doğrulama eşleşmiyor.');
+      }
+      return true;
+    }),
+  ],
+  (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    // Veriler doğrulandıktan sonra kayıt işlemi gerçekleştirin.
+    const { username, email, password } = req.body;
+    res.send(`Kullanıcı ${username} başarıyla kaydedildi.`);
+  }
+);
+```
