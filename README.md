@@ -1,6 +1,6 @@
 # PHP'den NodeJS'e Geçiş
 
-Bildiğiniz gibi yıllardır PROTOTURK youtube kanalında PHP programlama dili ile ilgili içerikler ürettim. Birazda NodeJS içerikleri üretmek istediğim için ve kanalın neredeyse tamamı PHP geliştirdiği için PHP'den NodeJS'e soft bir geçiş için bir rehber hazırlamak istiyorum.
+Bildiğiniz gibi yıllardır PROTOTURK youtube kanalında PHP programlama dili ile ilgili içerikler ürettim. Biraz da NodeJS içerikleri üretmek istediğim için ve kanalın neredeyse tamamı PHP geliştirdiği için PHP'den NodeJS'e soft bir geçiş için bir rehber hazırlamak istiyorum.
 
 Aynı zamanda zaten bu işlemi videolu olarak yapıyoruz, burada da yazılı kalsın.
 
@@ -66,7 +66,7 @@ gibi. Tabi bu kod doğrudan çalışmaz ancak PHP developer olarak ne demek iste
 
 ### NodeJS
 
-NodeJS'de web uygulamarı geliştirilirken en yaygın kullanılan `express` çatısı. Elbette bir sürü alternatifi var ama soft geçişte sanırım en manıtklısı bu. Dolayısı ile routing'ler ile çalışmak için ilk olarak `express` paketini kuralım.
+NodeJS'de web uygulamaları geliştirilirken en yaygın kullanılan `express` çatısı. Elbette bir sürü alternatifi var ama soft geçişte sanırım en mantıklısı bu. Dolayısı ile routing'ler ile çalışmak için ilk olarak `express` paketini kuralım.
 
 ```shell
 npm i express
