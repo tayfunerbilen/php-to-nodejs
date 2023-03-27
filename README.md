@@ -258,3 +258,45 @@ app.post(
   }
 );
 ```
+
+## Oturum Yönetimi (SESSION)
+
+Oturum yönetimi için `express-session` paketini kullanıyoruz. Önce paketi kuralım:
+
+```shell
+npm i express-session
+```
+
+daha sonra `app.js` de yani main javascript dosyanızda bunu içeri alın.
+
+```js
+import session from "express-session"
+```
+
+ve kullanırken `express` de middleware olarak şöyle kullanın:
+
+```js
+app.use(
+	session({
+		secret: 'benzersiz_bir_anahtar', // session sifrelemesi icin
+		resave: false,
+		saveUninitialized: true
+	})
+)
+```
+
+artık routing'de `req` altında `req.session` olarak session'lara erişebilir ya da yeni session'lar tanımlayabilirsiniz. Örneğin:
+
+```js
+app.get('/', (req, res) => {
+	req.session.user_id = 3 // artik session islemim basladi
+})
+```
+
+oturumu sonlandırmak içinde `destroy()` metodunu kullanabilirsiniz. Örneğin:
+
+```js
+app.get('/logout', (req, res) => {
+	req.session.destroy() // oturum sonlandırıldı
+})
+```
