@@ -72,6 +72,13 @@ NodeJS'de web uygulamaları geliştirilirken en yaygın kullanılan `express` ç
 npm i express
 ```
 
+İlk olarak `package.json` dosyamızın içerisine  aşağıdaki tanımlamayı ekleyelim 
+
+```js
+  "type": "module",
+```
+
+
 Ve daha sonra `app.js` dosyamızı şöyle güncelleyelim.
 
 ```js
